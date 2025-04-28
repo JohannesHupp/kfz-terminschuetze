@@ -41,9 +41,9 @@ FIN3         = ""           # optional
 # ——————————————
 # Ablaufsteuerung
 # ——————————————
-SUBMIT       = True          # True: Buchung abschicken; False: Dry-Run
-DEBUG        = False         # True: Browser-Fenster im Debug öffnen
-SEND_NOTIFICATION_EMAIL=True # True: Sendet eine Benachrichtungsemail für die Terminbuchung 
+SUBMIT                   = True          # True: Buchung abschicken; False: Dry-Run
+DEBUG                    = False         # True: Browser-Fenster im Debug öffnen
+SEND_NOTIFICATION_EMAIL  = True          # True: Sendet eine Benachrichtungsemail für die Terminbuchung 
 
 # ——————————————
 # SMTP / E-Mail-Einstellungen (bsp. mit Google SMTP)

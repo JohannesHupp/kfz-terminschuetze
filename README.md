@@ -150,3 +150,13 @@ Nach erfolgreicher Terminbuchung verschickt der Bot eine E-Mail. Die Funktionali
 
 Dieses Projekt steht unter der [MIT Lizenz](LICENSE).
 
+## Rechtlicher Zusatz-Hinweis (Disclaimer)
+
+Dieses Softwareprojekt interagiert automatisiert mit externen Websites (z.B. Terminportalen). Bitte beachte, dass die Nutzung dieser Software auf eigene Verantwortung erfolgt. 
+
+Es wird ausdrücklich darauf hingewiesen, dass durch die Verwendung dieser Software möglicherweise gegen die Nutzungsbedingungen der jeweiligen Anbieter verstoßen werden kann. Der Autor übernimmt keinerlei Haftung für eventuelle Sperrungen, rechtliche Konsequenzen oder Schäden, die aus der Verwendung dieser Software resultieren.
+
+Die Software ist ausschließlich für private, nicht-kommerzielle Zwecke sowie zu Test- und Lernzwecken bestimmt.
+
+Nutzer sind angehalten, die jeweils gültigen Nutzungsbedingungen und gesetzlichen Vorgaben eigenständig zu prüfen und einzuhalten.
+

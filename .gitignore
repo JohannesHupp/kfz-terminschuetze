@@ -1,0 +1,5 @@
+# Logging File
+terminbot.log 
+
+# Configuration File (Halte die eigene Konfiguration geheim)
+config.py

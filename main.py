@@ -25,7 +25,7 @@ import config
 from wsid_fetcher import fetch_wsid
 from booking import run_booking_cycle
 from utils import sleep_random
-from notifier import send_notification_email
+from notifier import send_notification_email, send_pushover_notification
 
 def main():
     """
@@ -57,9 +57,12 @@ def main():
             if gebucht:
                 logging.info("✅ Termin wurde erfolgreich gebucht.")
 
-                # 3. Optional: E-Mail-Benachrichtigung bei erfolgreicher Buchung
+                # 3. Optional: E-Mail oder Pushover Benachrichtigung bei erfolgreicher Buchung
                 if config.SEND_NOTIFICATION_EMAIL:
                     send_notification_email()
+
+                if config.SEND_PUSHOVER_NOTIFICATION:
+                    send_pushover_notification()
 
                 # 4. Erfolgreiche Buchung -> Programm beenden
                 logging.info("🏁 Terminbuchung abgeschlossen. Programm wird beendet.")

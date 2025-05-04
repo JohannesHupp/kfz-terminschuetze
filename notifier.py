@@ -18,6 +18,9 @@ from email.mime.text import MIMEText
 
 import config
 
+import http.client
+import urllib
+
 def send_notification_email():
     """
     Sendet eine Benachrichtigungs-E-Mail nach erfolgreicher Terminbuchung.
@@ -45,3 +48,32 @@ def send_notification_email():
     except Exception as e:
         # Fehler beim Senden der E-Mail protokollieren
         logging.error(f"❌ Fehler beim Senden der Benachrichtigungs-E-Mail: {e}")
+
+def send_pushover_notification():
+    """
+    Sendet eine Push-Benachrichtigung über Pushover.
+    """
+    try:
+        conn = http.client.HTTPSConnection("api.pushover.net", 443)
+        payload = urllib.parse.urlencode({
+            "token": config.PUSHOVER_APP_TOKEN,
+            "user": config.PUSHOVER_USER_KEY,
+            "title": "🎉 Termin erfolgreich gebucht!",
+            "message": ("Eure Majestät, der Termin wurde erfolgreich gebucht.\n"
+                        "Weitere Details entnehmt bitte dem Protokoll.")
+        })
+        headers = { "Content-type": "application/x-www-form-urlencoded" }
+
+        conn.request("POST", "/1/messages.json", payload, headers)
+        response = conn.getresponse()
+
+        if response.status == 200:
+            logging.info("✅ Pushover-Benachrichtigung erfolgreich gesendet.")
+        else:
+            logging.warning(f"⚠️ Fehler beim Senden der Pushover-Benachrichtigung: "
+                            f"{response.status} {response.reason}")
+
+        conn.close()
+
+    except Exception as e:
+        logging.error(f"❌ Fehler beim Senden der Pushover-Benachrichtigung: {e}")

@@ -21,7 +21,7 @@
 
 ## Über das Projekt
 
-Der **KFZ Termin Bot** automatisiert den Prozess der Terminbuchung auf der Website der Stadt Köln für Kfz-Zulassungstermine. Er prüft in regelmäßigen Abständen verfügbare Termine im konfigurierten Monat und an den gewünschten Tagen. Bei erfolgreicher Buchung wird eine Benachrichtigungs-E-Mail verschickt, danach beendet sich das Programm.
+Der **KFZ Termin Bot** automatisiert den Prozess der Terminbuchung auf der Website der Stadt Köln für Kfz-Zulassungstermine. Er prüft in regelmäßigen Abständen verfügbare Termine im konfigurierten Monat und an den gewünschten Tagen. Bei erfolgreicher Buchung wird eine Benachrichtigungs-E-Mail oder eine Pushover Benachrichtigung verschickt, danach beendet sich das Programm.
 
 ## Funktionen
 
@@ -31,6 +31,7 @@ Der **KFZ Termin Bot** automatisiert den Prozess der Terminbuchung auf der Websi
 - Zufällige Warteintervalle zwischen den Prüfzyklen (`utils.py`)
 - Wiederholungs-Mechanismen bei Fehlern (Retry-Decorator)
 - E-Mail-Benachrichtigung bei erfolgreicher Buchung (konfigurierbar via `SEND_NOTIFICATION_EMAIL`, `notifier.py`)
+- Pushover Benachrichtigung bei erfolgreicher Buchung (konfigurierbar via `SEND_NOTIFICATION_PUSHOVER`, `notifier.py`)
 - Headless- und Debug-Modus
 - Ausführliches Logging in Datei und Konsole
 
@@ -40,7 +41,7 @@ Der **KFZ Termin Bot** automatisiert den Prozess der Terminbuchung auf der Websi
 main.py      # Koordination: WSID holen, Buchungs-Loop, Notifikation
  ├── wsid_fetcher.py  # Holt WSID via Redirect-Header
  ├── booking.py       # Füllt Terminformular aus und bucht
- ├── notifier.py      # Sendet E-Mail-Benachrichtigung
+ ├── notifier.py      # Sendet Benachrichtigungen (Email, Pushover)
  └── utils.py         # Helfer: sleep_random, retry-Decorator
  config.py    # Alle Einstellungen (URLs, Zieltermine, Credentials)
  terminbot.log # Logdatei
@@ -56,20 +57,20 @@ main.py      # Koordination: WSID holen, Buchungs-Loop, Notifikation
 ## Installation
 
 1. Repository klonen:
-   ```bash
-   git clone https://github.com/JohannesHupp/kfz-terminschuetze.git
-   cd kfz-terminschuetze
-   ```
+    ```bash
+    git clone https://github.com/JohannesHupp/kfz-terminschuetze.git
+    cd kfz-terminschuetze
+    ```
 2. Virtuelle Umgebung erstellen und aktivieren:
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate  # Linux/macOS
-   venv\Scripts\activate   # Windows
-   ```
+    ```bash
+    python3 -m venv venv
+    source venv/bin/activate  # Linux/macOS
+    venv\Scripts\activate   # Windows
+    ```
 3. Abhängigkeiten installieren:
-   ```bash
-   pip install -r requirements.txt
-   ```
+    ```bash
+    pip install -r requirements.txt
+    ```
 4. ChromeDriver ins Systempath legen oder Pfad anpassen.
 
 ## Konfiguration
@@ -78,33 +79,37 @@ Alle Einstellungen befinden sich in der Datei `config.py`:
 
 - **TECHNISCHE PARAMETER**
 
-  - `BASE_URL`: Basis-URL des Terminportals
-  - `UID`: Deine eindeutige User-ID
-  - `LANG`: UI-Sprache (z.B. "de")
-  - `EC_TIMEOUT`: Timeout für Selenium-ExpectedConditions
-  - `BOOKING_PATH`: Teil der URL für die Buchungsseite
+    - `BASE_URL`: Basis-URL des Terminportals
+    - `UID`: Deine eindeutige User-ID
+    - `LANG`: UI-Sprache (z.B. "de")
+    - `EC_TIMEOUT`: Timeout für Selenium-ExpectedConditions
+    - `BOOKING_PATH`: Teil der URL für die Buchungsseite
 
 - **ZIELTERMINE**
 
-  - `TARGET_MONTH`: Zielmonat (Nummer, z.B. 4 = April)
-  - `TARGET_DAYS`: Liste gewünschter Tage im Monat (z.B. `[21, 22, 23]`)
+    - `TARGET_MONTH`: Zielmonat (Nummer, z.B. 4 = April)
+    - `TARGET_DAYS`: Liste gewünschter Tage im Monat (z.B. `[21, 22, 23]`)
 
 - **WARTEINTERVALLE**
 
-  - `MIN_WAIT_SECONDS`, `MAX_WAIT_SECONDS`: Pause zwischen Prüfzyklen
+    - `MIN_WAIT_SECONDS`, `MAX_WAIT_SECONDS`: Pause zwischen Prüfzyklen
 
 - **PERSÖNLICHE DATEN**
 
-  - `SALUTATION`, `FIRST_NAME`, `LAST_NAME`, `EMAIL`, `PHONE`, `FIN1`, `FIN2`, `FIN3`
+    - `SALUTATION`, `FIRST_NAME`, `LAST_NAME`, `EMAIL`, `PHONE`, `FIN1`, `FIN2`, `FIN3`
 
 - **ABLAUFSTEUERUNG**
 
-  - `SUBMIT`: Bei `False` erfolgt nur ein Dry-Run.  - `DEBUG`: Bei `True` bleibt das Browserfenster offen.
-  - `SEND_NOTIFICATION_EMAIL`: Bei `True` wird nach erfolgreicher Buchung eine E-Mail verschickt; bei `False` erfolgt keine Benachrichtigung.
+    - `SUBMIT`: Bei `False` erfolgt nur ein Dry-Run. - `DEBUG`: Bei `True` bleibt das Browserfenster offen.
+    - `SEND_NOTIFICATION_EMAIL`: Bei `True` wird nach erfolgreicher Buchung eine E-Mail verschickt; bei `False` erfolgt keine Benachrichtigung.
+    - `SEND_NOTIFICATION_PUSHOVER`: Bei `True` wird eine Pushover-Benachrichtigung verschickt; bei `False` erfolgt keine Benachrichtigung.
 
 - **SMTP / E-MAIL**
 
-  - `ABSENDER`, `EMPFAENGER`, `SMTP_SERVER`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`
+    - `ABSENDER`, `EMPFAENGER`, `SMTP_SERVER`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`
+
+- **PUSHOVER**
+    - `PUSHOVER_APP_TOKEN`, `PUSHOVER_USER_KEY`
 
 Passe diese Werte an deine Gegebenheiten an.
 
@@ -121,7 +126,7 @@ Der Bot läuft in einer Endlosschleife:
 1. Holt die WSID
 2. Prüft verfügbare Termine
 3. Bucht den ersten passenden Termin
-4. Sendet E-Mail bei Erfolg und beendet sich
+4. Sendet Benachrichtigungen bei Erfolg und beendet sich
 5. Bei keinem Treffer: Pause & nächster Versuch
 
 ## Debugging & Dry-Run
@@ -139,7 +144,7 @@ Logs werden in `terminbot.log` und in der Konsole ausgegeben. Das Log enthält:
 
 ## Benachrichtigungen
 
-Nach erfolgreicher Terminbuchung verschickt der Bot eine E-Mail. Die Funktionalität ist implementiert in `notifier.py`. Stelle sicher, dass deine SMTP-Daten korrekt sind.
+Nach erfolgreicher Terminbuchung verschickt der Bot eine E-Mail oder Pushover-Benachrichtigung. Die Funktionalität ist implementiert in `notifier.py`. Stelle sicher, dass deine SMTP-Daten korrekt sind oder du eine Pushover-App eingerichtet hast.
 
 ## Beitragende
 
@@ -152,11 +157,10 @@ Dieses Projekt steht unter der [MIT Lizenz](LICENSE).
 
 ## Rechtlicher Zusatz-Hinweis (Disclaimer)
 
-Dieses Softwareprojekt interagiert automatisiert mit externen Websites (z.B. Terminportalen). Bitte beachte, dass die Nutzung dieser Software auf eigene Verantwortung erfolgt. 
+Dieses Softwareprojekt interagiert automatisiert mit externen Websites (z.B. Terminportalen). Bitte beachte, dass die Nutzung dieser Software auf eigene Verantwortung erfolgt.
 
 Es wird ausdrücklich darauf hingewiesen, dass durch die Verwendung dieser Software möglicherweise gegen die Nutzungsbedingungen der jeweiligen Anbieter verstoßen werden kann. Der Autor übernimmt keinerlei Haftung für eventuelle Sperrungen, rechtliche Konsequenzen oder Schäden, die aus der Verwendung dieser Software resultieren.
 
 Die Software ist ausschließlich für private, nicht-kommerzielle Zwecke sowie zu Test- und Lernzwecken bestimmt.
 
 Nutzer sind angehalten, die jeweils gültigen Nutzungsbedingungen und gesetzlichen Vorgaben eigenständig zu prüfen und einzuhalten.
-

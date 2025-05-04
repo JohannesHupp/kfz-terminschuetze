@@ -44,6 +44,7 @@ FIN3         = ""           # optional
 SUBMIT                   = True          # True: Buchung abschicken; False: Dry-Run
 DEBUG                    = False         # True: Browser-Fenster im Debug öffnen
 SEND_NOTIFICATION_EMAIL  = True          # True: Sendet eine Benachrichtungsemail für die Terminbuchung 
+SEND_PUSHOVER_NOTIFICATION = True          # True: Sendet eine Pushover Benachrichtigung für die Terminbuchung
 
 # ——————————————
 # SMTP / E-Mail-Einstellungen (bsp. mit Google SMTP)
@@ -54,3 +55,11 @@ SMTP_SERVER      = "smtp.gmail.com"        # SMTP Server Adresse
 SMTP_PORT        = 587                     # SMTP Server Port
 SMTP_USER        = ABSENDER                # SMTP Server Benutzer (meist der Absender)
 SMTP_PASS        = "xxxx xxxx xxxx xxxx"   # 16-stelliger App-Passwort
+
+# ---------------
+# PUSHOVER EINSTELLUNGEN
+# ——————————————
+PUSHOVER_APP_TOKEN = "XXXXX" # Pushover APP Token
+PUSHOVER_USER_KEY  = "XXXXX" # Pushover User Key
+
+

@@ -148,8 +148,8 @@ Nach erfolgreicher Terminbuchung verschickt der Bot eine E-Mail oder Pushover-Be
 
 ## Beitragende
 
-- **Autor**: Johannes Hupp
-- **Lizenz**: Siehe unten
+- **Autor:** Johannes Hupp  
+- **Mitwirkender:** Robin Tuszik (rtuszik) – PushOver-Benachrichtigungsfunktion (v1.2.0)
 
 ## Lizenz
 
